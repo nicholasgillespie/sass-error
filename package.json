@@ -1,7 +1,7 @@
 {
   "name": "sass-error",
   "version": "1.0.4",
-  "description": "A five-step convention for writing mechanically precise and strictly actionable error messages — with Sass utility functions for building paths, printing values, and formatting options.",
+  "description": "Sass utility functions for building error message paths, value outputs, and options strings.",
   "keywords": [
     "sass",
     "scss",

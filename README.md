@@ -1,6 +1,6 @@
 # sass-error
 
-A [five-step convention](https://github.com/nicholasgillespie/sass-error-spec) for writing mechanically precise and strictly actionable error messages — with Sass utility functions for building paths, printing values, and formatting options.
+Sass utility functions for building error message paths, value outputs, and options strings — following the [Error Message Authoring Specification](https://github.com/nicholasgillespie/sass-error-spec).
 
 ---
 
