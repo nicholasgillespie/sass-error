@@ -1,0 +1,42 @@
+{
+  "name": "sass-error",
+  "version": "1.0.4",
+  "description": "A five-step convention for writing mechanically precise and strictly actionable error messages — with Sass utility functions for building paths, printing values, and formatting options.",
+  "keywords": [
+    "sass",
+    "scss",
+    "error",
+    "error-messages",
+    "validation",
+    "utilities"
+  ],
+  "homepage": "https://github.com/nicholasgillespie/sass-error#readme",
+  "license": "MIT",
+  "author": "Nicholas Gillespie (https://github.com/nicholasgillespie)",
+  "funding": {
+    "type": "github",
+    "url": "https://github.com/sponsors/nicholasgillespie"
+  },
+  "files": [
+    "index.scss",
+    "spec.md",
+    "README.md"
+  ],
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/nicholasgillespie/sass-error.git"
+  },
+  "peerDependencies": {
+    "sass-funcs": ">=1.0.0",
+    "sass": ">=1.33.0",
+    "sass-embedded": ">=1.33.0"
+  },
+  "peerDependenciesMeta": {
+    "sass": {
+      "optional": true
+    },
+    "sass-embedded": {
+      "optional": true
+    }
+  }
+}

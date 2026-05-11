@@ -1,0 +1,122 @@
+@use 'sass:meta';
+@use 'sass:list';
+@use 'sass-funcs/meta' as m;
+@use 'sass-funcs/list' as l;
+@use 'sass-funcs/string' as s;
+
+// CONFIG ──────────────────────────────────────────────────────────────────────
+
+// Entry labels — mark a collection member's role in error codes
+$ERROR_LABEL_ENTRY: 'ENTRY' !default; // _ID variant (e.g. ENTRY_ID) → <id> substitution
+$ERROR_LABEL_FIELD: 'FIELD' !default;
+$ERROR_ENTRY_LABELS: ($ERROR_LABEL_ENTRY, $ERROR_LABEL_FIELD) !default;
+
+// Path formatting
+$PATH_PREFIX: ' @ ' !default;
+$PATH_SEPARATOR: ' > ' !default;
+$PATH_ID_PLACEHOLDER: '<id>' !default;
+
+// Options formatting
+$OPTIONS_LIMIT: 5 !default; // caps the number of options shown in error messages
+$OPTIONS_SEPARATOR: ' | ' !default;
+$OPTIONS_MORE_LABEL: 'more' !default;
+
+// PUBLIC API ──────────────────────────────────────────────────────────────────
+
+/// Builds a formatted path string from path segments for use in error messages
+/// @param {List | String} $path - Path segments, or a single value normalised to a list
+/// @param {Bool} $is-id-error [false] - Replaces the last segment with `<id>` when true
+/// @param {String} $separator [$PATH_SEPARATOR] - Separator placed between path segments
+/// @return {String} Path string prefixed with `$PATH_PREFIX`, or `''` if path is empty
+@function path($path, $is-id-error: false, $separator: $PATH_SEPARATOR) {
+  @if m.type-of($is-id-error) != 'bool' {
+    @error '$is-id-error: #{meta.inspect($is-id-error)} is not a bool.';
+  } @else if m.type-of($separator) != 'string' {
+    @error '$separator: #{meta.inspect($separator)} is not a string.';
+  }
+
+  @if not m.is-type($path, ('list', 'arglist')) {
+    $path: l.push((), $path);
+  }
+
+  // For ID errors, replace the last segment with <id>
+  @if $is-id-error and list.length($path) > 0 {
+    $parent-path: l.slice($path, 1, list.length($path) - 1);
+    $path: l.push($parent-path, $PATH_ID_PLACEHOLDER);
+  }
+
+  $path-string: l.join($path, $separator);
+  @if $path-string == '' {
+    @return '';
+  } @else {
+    @return '#{$PATH_PREFIX}#{$path-string}';
+  }
+}
+
+/// Renders a value as a printable string for use in error messages
+/// @param {*} $value - Value to render; strings returned as-is, lists wrapped in parens, others inspected
+/// @param {Bool} $quote-empty [false] - Wraps empty or whitespace-only strings in double quotes when true
+/// @return {String} Printable string representation of `$value`
+@function print($value, $quote-empty: false) {
+  $type: m.type-of($value);
+
+  @if $type == 'string' {
+    @if $quote-empty and s.trim($value) == '' {
+      @return '"#{$value}"';
+    } @else {
+      @return $value;
+    }
+  } @else if ($type == 'list' or $type == 'arglist') and list.length($value) > 0 {
+    @return '(#{meta.inspect($value)})';
+  } @else {
+    @return meta.inspect($value);
+  }
+}
+
+/// Formats a list of allowed values into a readable options string for error messages
+/// @param {List | String} $items - Allowed values; normalised to a list if a single value is passed
+/// @param {String | Number | Bool | Color | List | Null} $extra [null] - Additional value(s) appended after the main list
+/// @param {Number | Null} $limit [$OPTIONS_LIMIT] - Max items shown before truncating with a remaining count
+/// @param {String} $separator [$OPTIONS_SEPARATOR] - Separator placed between options
+/// @return {String} Joined options string, truncated to `$limit` items if the count is exceeded
+@function options($items, $extra: null, $limit: $OPTIONS_LIMIT, $separator: $OPTIONS_SEPARATOR) {
+  $allowed-extra-types: ('string', 'number', 'bool', 'color', 'list', 'arglist');
+
+  @if $extra != null and not m.is-type($extra, $allowed-extra-types) {
+    @error '$extra: #{meta.inspect($extra)} is not a string, number, bool, color, or list.';
+  } @else if $limit != null and m.type-of($limit) != 'number' {
+    @error '$limit: #{meta.inspect($limit)} is not a number or null.';
+  } @else if m.type-of($separator) != 'string' {
+    @error '$separator: #{meta.inspect($separator)} is not a string.';
+  }
+
+  // Normalize to list
+  @if not m.is-type($items, ('list', 'arglist')) {
+    $items: l.push((), $items);
+  }
+
+  // Truncate if needed
+  $count: list.length($items);
+  @if $limit != null and $limit > 0 and $count > $limit {
+    $visible: l.slice($items, 1, $limit);
+    $hidden: $count - $limit;
+    $items: l.push($visible, '... #{$hidden} #{$OPTIONS_MORE_LABEL}');
+  }
+
+  // Convert empty, whitespace, null, or lists to string representations
+  $result: ();
+  @each $item in $items {
+    $result: l.push($result, print($item, $quote-empty: true));
+  }
+
+  // Append extra values if provided
+  @if $extra != null {
+    @if m.is-type($extra, ('list', 'arglist')) {
+      $result: l.concat($result, $extra);
+    } @else {
+      $result: l.push($result, $extra);
+    }
+  }
+
+  @return l.join($result, $separator);
+}
