@@ -1,6 +1,6 @@
 # sass-error
 
-Sass utility functions for building error message paths, value outputs, and options strings — following the [Error Message Authoring Specification](https://github.com/nicholasgillespie/sass-error-spec).
+Sass utility functions for building error message paths, value outputs, and formatting options — following the [Error Message Authoring Specification](https://github.com/nicholasgillespie/sass-error-spec).
 
 ---
 
