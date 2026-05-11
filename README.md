@@ -58,7 +58,7 @@ All constants are configurable via `@use ... with (...)`:
 
 ---
 
-## Module: Error
+## [Module: Error](index.scss)
 
 ```scss
 @use 'sass-error' as e;
