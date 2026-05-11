@@ -1,6 +1,6 @@
 # sass-error
 
-A [five-step convention](./spec.md) for writing mechanically precise and strictly actionable error messages — with Sass utility functions for building paths, printing values, and formatting options.
+A [five-step convention](https://github.com/nicholasgillespie/sass-error-spec) for writing mechanically precise and strictly actionable error messages — with Sass utility functions for building paths, printing values, and formatting options.
 
 ---
 
@@ -18,17 +18,17 @@ Every error message is a single structured string composed of a machine-readable
 [TOKEN_TIER_VALUE] Token "font-weight" @ settings > tier: Invalid value "random" → Allowed: primitive | semantic | component
 ```
 
-> **Note:** See the **[Error Message Authoring Specification](./spec.md)** for a step-by-step breakdown of how each message is constructed.
+> **Note:** See the **[Error Message Authoring Specification](https://github.com/nicholasgillespie/sass-error-spec)** for a step-by-step breakdown of how each message is constructed.
 
 ---
 
 ## Installation
 
 ```sh
-npm install sass-funcs sass-error
+npm install sass-error sass-funcs
 ```
 
-> Requires `sass >= 1.33.0` or `sass-embedded >= 1.33.0` — install one, not both. `sass-embedded` is recommended: it wraps a native Dart binary and is typically 20–30% faster to compile than the pure-JS `sass` package.
+> Requires [`sass`](https://www.npmjs.com/package/sass) `>= 1.33.0` or [`sass-embedded`](https://www.npmjs.com/package/sass-embedded) `>= 1.33.0` — install one, not both. `sass-embedded` is recommended: it wraps a native Dart binary and is typically 20–30% faster to compile than the pure-JS `sass` package. Also requires [`sass-funcs`](https://github.com/nicholasgillespie/sass-funcs), used internally.
 
 ---
 
