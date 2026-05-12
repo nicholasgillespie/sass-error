@@ -44,17 +44,14 @@ All constants are configurable via `@use ... with (...)`:
 );
 ```
 
-| Variable               | Default              | Description                                |
-| ---------------------- | -------------------- | ------------------------------------------ |
-| `$ERROR_LABEL_ENTRY`   | `'ENTRY'`            | Default entry label in error codes         |
-| `$ERROR_LABEL_FIELD`   | `'FIELD'`            | Alternative entry label                    |
-| `$ERROR_ENTRY_LABELS`  | `('ENTRY', 'FIELD')` | All recognised entry labels                |
-| `$PATH_PREFIX`         | `' @ '`              | Prefix before the path string              |
-| `$PATH_SEPARATOR`      | `' > '`              | Separator between path segments            |
-| `$PATH_ID_PLACEHOLDER` | `'<id>'`             | Placeholder when the key itself is invalid |
-| `$EXPECTED_LIMIT`      | `5`                  | Max values shown before truncating         |
-| `$EXPECTED_SEPARATOR`  | `' \| '`             | Separator between values                   |
-| `$EXPECTED_MORE_LABEL` | `'more'`             | Label for the remaining count              |
+| Variable               | Default  | Description                                |
+| ---------------------- | -------- | ------------------------------------------ |
+| `$PATH_PREFIX`         | `' @ '`  | Prefix before the path string              |
+| `$PATH_SEPARATOR`      | `' > '`  | Separator between path segments            |
+| `$PATH_ID_PLACEHOLDER` | `'<id>'` | Placeholder when the key itself is invalid |
+| `$EXPECTED_LIMIT`      | `5`      | Max values shown before truncating         |
+| `$EXPECTED_SEPARATOR`  | `' \| '` | Separator between values                   |
+| `$EXPECTED_MORE_LABEL` | `'more'` | Label for the remaining count              |
 
 ---
 
@@ -130,5 +127,17 @@ e.expected(('foo', 'bar', 'baz'))                       // → 'foo | bar | baz'
 e.expected(('a', 'b', 'c', 'd', 'e', 'f'), $limit: 3)   // → 'a | b | c | ... 3 more'
 e.expected(('foo', 'bar'), $extra: 'baz')               // → 'foo | bar | baz'
 ```
+
+---
+
+## Migration
+
+### v1 → v2
+
+- `print()` renamed to `received()`
+- `options()` renamed to `expected()`
+- `$ERROR_LABEL_ENTRY`, `$ERROR_LABEL_FIELD`, `$ERROR_ENTRY_LABELS` removed — moved to [`sass-valid`](https://github.com/nicholasgillespie/sass-valid)
+
+---
 
 [Back to top](#sass-error)

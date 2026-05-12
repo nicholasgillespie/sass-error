@@ -6,11 +6,6 @@
 
 // CONFIG ──────────────────────────────────────────────────────────────────────
 
-// Entry labels — mark a collection member's role in error codes
-$ERROR_LABEL_ENTRY: 'ENTRY' !default; // _ID variant (e.g. ENTRY_ID) → <id> substitution
-$ERROR_LABEL_FIELD: 'FIELD' !default;
-$ERROR_ENTRY_LABELS: ($ERROR_LABEL_ENTRY, $ERROR_LABEL_FIELD) !default;
-
 // Path formatting
 $PATH_PREFIX: ' @ ' !default;
 $PATH_SEPARATOR: ' > ' !default;
