@@ -136,7 +136,7 @@ e.expected(('foo', 'bar'), $extra: 'baz')               // → 'foo | bar | baz'
 
 - `print()` renamed to `received()`
 - `options()` renamed to `expected()`
-- `$ERROR_LABEL_ENTRY`, `$ERROR_LABEL_FIELD`, `$ERROR_ENTRY_LABELS` removed — moved to [`sass-valid`](https://github.com/nicholasgillespie/sass-valid)
+- `$ERROR_LABEL_ENTRY`, `$ERROR_LABEL_FIELD`, `$ERROR_ENTRY_LABELS` removed — moved to [`sass-valid`](https://www.npmjs.com/package/sass-valid)
 
 ---
 
