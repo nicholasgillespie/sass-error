@@ -16,10 +16,10 @@ $PATH_PREFIX: ' @ ' !default;
 $PATH_SEPARATOR: ' > ' !default;
 $PATH_ID_PLACEHOLDER: '<id>' !default;
 
-// Options formatting
-$OPTIONS_LIMIT: 5 !default; // caps the number of options shown in error messages
-$OPTIONS_SEPARATOR: ' | ' !default;
-$OPTIONS_MORE_LABEL: 'more' !default;
+// Expected formatting
+$EXPECTED_LIMIT: 5 !default; // Cap the number of values shown in error messages
+$EXPECTED_SEPARATOR: ' | ' !default;
+$EXPECTED_MORE_LABEL: 'more' !default;
 
 // PUBLIC API ──────────────────────────────────────────────────────────────────
 
@@ -39,7 +39,7 @@ $OPTIONS_MORE_LABEL: 'more' !default;
     $path: l.push((), $path);
   }
 
-  // For ID errors, replace the last segment with <id>
+  // Replace the last segment with the ID placeholder
   @if $is-id-error and list.length($path) > 0 {
     $parent-path: l.slice($path, 1, list.length($path) - 1);
     $path: l.push($parent-path, $PATH_ID_PLACEHOLDER);
@@ -53,11 +53,11 @@ $OPTIONS_MORE_LABEL: 'more' !default;
   }
 }
 
-/// Renders a value as a printable string for use in error messages
-/// @param {*} $value - Value to render; strings returned as-is, lists wrapped in parens, others inspected
+/// Renders a received value as a string for use in error messages
+/// @param {*} $value - Value to render
 /// @param {Bool} $quote-empty [false] - Wraps empty or whitespace-only strings in double quotes when true
-/// @return {String} Printable string representation of `$value`
-@function print($value, $quote-empty: false) {
+/// @return {String} Strings returned as-is, non-empty lists wrapped in parens, all others inspected
+@function received($value, $quote-empty: false) {
   $type: m.type-of($value);
 
   @if $type == 'string' {
@@ -73,14 +73,26 @@ $OPTIONS_MORE_LABEL: 'more' !default;
   }
 }
 
-/// Formats a list of allowed values into a readable options string for error messages
-/// @param {List | String} $items - Allowed values; normalised to a list if a single value is passed
+/// Formats a list of expected values into a readable string for error messages
+/// @param {List | String} $items - Expected values; normalised to a list if a single value is passed
 /// @param {String | Number | Bool | Color | List | Null} $extra [null] - Additional value(s) appended after the main list
-/// @param {Number | Null} $limit [$OPTIONS_LIMIT] - Max items shown before truncating with a remaining count
-/// @param {String} $separator [$OPTIONS_SEPARATOR] - Separator placed between options
-/// @return {String} Joined options string, truncated to `$limit` items if the count is exceeded
-@function options($items, $extra: null, $limit: $OPTIONS_LIMIT, $separator: $OPTIONS_SEPARATOR) {
-  $allowed-extra-types: ('string', 'number', 'bool', 'color', 'list', 'arglist');
+/// @param {Number | Null} $limit [$EXPECTED_LIMIT] - Max items shown before truncating with a remaining count
+/// @param {String} $separator [$EXPECTED_SEPARATOR] - Separator placed between values
+/// @return {String} Joined expected string, truncated to `$limit` items if the count is exceeded
+@function expected(
+  $items,
+  $extra: null,
+  $limit: $EXPECTED_LIMIT,
+  $separator: $EXPECTED_SEPARATOR
+) {
+  $allowed-extra-types: (
+    'string',
+    'number',
+    'bool',
+    'color',
+    'list',
+    'arglist'
+  );
 
   @if $extra != null and not m.is-type($extra, $allowed-extra-types) {
     @error '$extra: #{meta.inspect($extra)} is not a string, number, bool, color, or list.';
@@ -100,13 +112,13 @@ $OPTIONS_MORE_LABEL: 'more' !default;
   @if $limit != null and $limit > 0 and $count > $limit {
     $visible: l.slice($items, 1, $limit);
     $hidden: $count - $limit;
-    $items: l.push($visible, '... #{$hidden} #{$OPTIONS_MORE_LABEL}');
+    $items: l.push($visible, '... #{$hidden} #{$EXPECTED_MORE_LABEL}');
   }
 
   // Convert empty, whitespace, null, or lists to string representations
   $result: ();
   @each $item in $items {
-    $result: l.push($result, print($item, $quote-empty: true));
+    $result: l.push($result, received($item, $quote-empty: true));
   }
 
   // Append extra values if provided

@@ -28,7 +28,7 @@ As defined by the specification, every error message is a single structured stri
 npm install sass-error sass-funcs
 ```
 
-> Requires [`sass`](https://www.npmjs.com/package/sass) `>= 1.33.0` or [`sass-embedded`](https://www.npmjs.com/package/sass-embedded) `>= 1.33.0` — install one, not both. `sass-embedded` is recommended: it wraps a native Dart binary and is typically 20–30% faster to compile than the pure-JS `sass` package. Also requires [`sass-funcs`](https://github.com/nicholasgillespie/sass-funcs), used internally.
+> Requires [`sass`](https://www.npmjs.com/package/sass) or [`sass-embedded`](https://www.npmjs.com/package/sass-embedded) `>= 1.33.0` — install one, not both (`sass-embedded` recommended). Also requires [`sass-funcs`](https://github.com/nicholasgillespie/sass-funcs), used internally.
 
 ---
 
@@ -39,8 +39,8 @@ All constants are configurable via `@use ... with (...)`:
 ```scss
 @use 'sass-error' as e with (
   $PATH_SEPARATOR: '/',
-  $OPTIONS_LIMIT: 3,
-  $OPTIONS_MORE_LABEL: 'plus'
+  $EXPECTED_LIMIT: 3,
+  $EXPECTED_MORE_LABEL: 'plus'
 );
 ```
 
@@ -52,9 +52,9 @@ All constants are configurable via `@use ... with (...)`:
 | `$PATH_PREFIX`         | `' @ '`              | Prefix before the path string              |
 | `$PATH_SEPARATOR`      | `' > '`              | Separator between path segments            |
 | `$PATH_ID_PLACEHOLDER` | `'<id>'`             | Placeholder when the key itself is invalid |
-| `$OPTIONS_LIMIT`       | `5`                  | Max options shown before truncating        |
-| `$OPTIONS_SEPARATOR`   | `' \| '`             | Separator between option values            |
-| `$OPTIONS_MORE_LABEL`  | `'more'`             | Label for the remaining count              |
+| `$EXPECTED_LIMIT`      | `5`                  | Max values shown before truncating         |
+| `$EXPECTED_SEPARATOR`  | `' \| '`             | Separator between values                   |
+| `$EXPECTED_MORE_LABEL` | `'more'`             | Label for the remaining count              |
 
 ---
 
@@ -64,11 +64,11 @@ All constants are configurable via `@use ... with (...)`:
 @use 'sass-error' as e;
 ```
 
-| Function                                          | Description                                   |
-| ------------------------------------------------- | --------------------------------------------- |
-| [`path`](#epathpath-is-id-error-separator)        | Builds a formatted path string from segments  |
-| [`print`](#eprintvalue-quote-empty)               | Renders a value as a printable string         |
-| [`options`](#eoptionsitems-extra-limit-separator) | Formats allowed values into an options string |
+| Function                                            | Description                                    |
+| --------------------------------------------------- | ---------------------------------------------- |
+| [`path`](#epathpath-is-id-error-separator)          | Builds a formatted path string from segments   |
+| [`received`](#ereceivedvalue-quote-empty)           | Renders a received value as a string           |
+| [`expected`](#eexpecteditems-extra-limit-separator) | Formats expected values into a readable string |
 
 ---
 
@@ -92,9 +92,9 @@ e.path(())                         // → ''
 
 ---
 
-### `e.print($value, $quote-empty)`
+### `e.received($value, $quote-empty)`
 
-Renders a value as a printable string for use in error messages.
+Renders a received value as a string for use in error messages.
 
 | Parameter      | Type   | Default | Description                                                       |
 | -------------- | ------ | ------- | ----------------------------------------------------------------- |
@@ -104,31 +104,31 @@ Renders a value as a printable string for use in error messages.
 **Returns** `String` — strings returned as-is, non-empty lists wrapped in parens, all others inspected.
 
 ```scss
-e.print('hello')      // → 'hello'
-e.print(42)           // → '42'
-e.print((a, b, c))    // → '(a, b, c)'
-e.print('', true)     // → '""'
+e.received('hello')      // → 'hello'
+e.received(42)           // → '42'
+e.received((a, b, c))    // → '(a, b, c)'
+e.received('', true)     // → '""'
 ```
 
 ---
 
-### `e.options($items, $extra, $limit, $separator)`
+### `e.expected($items, $extra, $limit, $separator)`
 
-Formats a list of allowed values into a readable options string for error messages.
+Formats a list of expected values into a readable string for error messages.
 
-| Parameter    | Type                                                | Default              | Description                                              |
-| ------------ | --------------------------------------------------- | -------------------- | -------------------------------------------------------- |
-| `$items`     | `List \| String`                                    |                      | Allowed values; normalised to a list if a single value   |
-| `$extra`     | `String \| Number \| Bool \| Color \| List \| Null` | `null`               | Additional value(s) appended after the main list         |
-| `$limit`     | `Number \| Null`                                    | `$OPTIONS_LIMIT`     | Max items shown before truncating with a remaining count |
-| `$separator` | `String`                                            | `$OPTIONS_SEPARATOR` | Separator placed between options                         |
+| Parameter    | Type                                                | Default               | Description                                              |
+| ------------ | --------------------------------------------------- | --------------------- | -------------------------------------------------------- |
+| `$items`     | `List \| String`                                    |                       | Expected values; normalised to a list if a single value  |
+| `$extra`     | `String \| Number \| Bool \| Color \| List \| Null` | `null`                | Additional value(s) appended after the main list         |
+| `$limit`     | `Number \| Null`                                    | `$EXPECTED_LIMIT`     | Max items shown before truncating with a remaining count |
+| `$separator` | `String`                                            | `$EXPECTED_SEPARATOR` | Separator placed between values                          |
 
-**Returns** `String` — joined options string, truncated to `$limit` items if the count is exceeded.
+**Returns** `String` — joined expected string, truncated to `$limit` items if the count is exceeded.
 
 ```scss
-e.options(('foo', 'bar', 'baz'))                       // → 'foo | bar | baz'
-e.options(('a', 'b', 'c', 'd', 'e', 'f'), $limit: 3)   // → 'a | b | c | ... 3 more'
-e.options(('foo', 'bar'), $extra: 'baz')               // → 'foo | bar | baz'
+e.expected(('foo', 'bar', 'baz'))                       // → 'foo | bar | baz'
+e.expected(('a', 'b', 'c', 'd', 'e', 'f'), $limit: 3)   // → 'a | b | c | ... 3 more'
+e.expected(('foo', 'bar'), $extra: 'baz')               // → 'foo | bar | baz'
 ```
 
 [Back to top](#sass-error)
