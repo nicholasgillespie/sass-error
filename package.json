@@ -1,7 +1,7 @@
 {
   "name": "sass-error",
   "version": "1.0.4",
-  "description": "Sass utility functions for building error message paths, value outputs, and formatting options.",
+  "description": "Sass utility functions for error message paths, value outputs, and options.",
   "keywords": [
     "sass",
     "scss",

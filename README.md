@@ -1,10 +1,10 @@
 # sass-error
 
-Sass utility functions for building error message paths, value outputs, and formatting options — following the [Error Message Specification](https://github.com/nicholasgillespie/sass-error-spec).
+Sass utility functions for error message paths, value outputs, and options — following the [Error Message Specification](https://github.com/nicholasgillespie/sass-error-spec).
 
 ---
 
-## The Convention
+## Message Format
 
 Every error message is a single structured string composed of a machine-readable code and a human-readable message.
 
@@ -12,7 +12,7 @@ Every error message is a single structured string composed of a machine-readable
 [CODE] <EntityType> "<EntityName>" [@ <Path>]: <Issue> → <Action> [context: ...]
 ```
 
-### Example in Practice
+### Example
 
 ```scss
 [TOKEN_TIER_VALUE] Token "font-weight" @ settings > tier: Invalid value "random" → Allowed: primitive | semantic | component
