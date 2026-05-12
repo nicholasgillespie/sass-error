@@ -1,6 +1,6 @@
 # sass-error
 
-Sass utility functions for building error message paths, value outputs, and formatting options — following the [Error Message Authoring Specification](https://github.com/nicholasgillespie/sass-error-spec).
+Sass utility functions for building error message paths, value outputs, and formatting options — following the [Error Message Specification](https://github.com/nicholasgillespie/sass-error-spec).
 
 ---
 
@@ -18,7 +18,7 @@ Every error message is a single structured string composed of a machine-readable
 [TOKEN_TIER_VALUE] Token "font-weight" @ settings > tier: Invalid value "random" → Allowed: primitive | semantic | component
 ```
 
-> **Note:** See the **[Error Message Authoring Specification](https://github.com/nicholasgillespie/sass-error-spec)** for a step-by-step breakdown of how each message is constructed.
+> **Note:** See the **[Error Message Specification](https://github.com/nicholasgillespie/sass-error-spec)** for a step-by-step breakdown of how each message is constructed.
 
 ---
 
