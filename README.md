@@ -85,9 +85,9 @@ Builds a formatted path string from path segments for use in error messages.
 **Returns** `String` — path string prefixed with `$PATH_PREFIX`, or `''` if path is empty.
 
 ```scss
-e.path(('settings', 'tier'))       // → ' @ settings > tier'
-e.path(('values', 'core'), true)   // → ' @ values > <id>'
-e.path(())                         // → ''
+e.path(('settings', 'tier'))           // → ' @ settings > tier'
+e.path(('values', 'core', ''), true)   // → ' @ values > core > <id>'
+e.path(())                             // → ''
 ```
 
 ---
